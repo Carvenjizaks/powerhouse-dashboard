@@ -27,7 +27,7 @@ function seed() {
     .prepare(
       "INSERT INTO focus_areas (slug, name, color, emoji, sort_order) VALUES (?, ?, ?, ?, ?)"
     )
-    .run("powerhouse", "POWERHOUSE", "#F59E0B", "⚡", 0);
+    .run("kingdom-building", "KINGDOM BUILDING", "#F59E0B", "👑", 0);
 
   sqlite
     .prepare(
@@ -40,7 +40,7 @@ function seed() {
     .prepare("SELECT id, slug FROM focus_areas ORDER BY sort_order")
     .all() as { id: number; slug: string }[];
 
-  const powerhouse = rows.find((r) => r.slug === "powerhouse");
+  const powerhouse = rows.find((r) => r.slug === "kingdom-building");
   const personal = rows.find((r) => r.slug === "personal");
 
   if (!powerhouse || !personal) {
@@ -48,7 +48,7 @@ function seed() {
     throw new Error("Failed to create focus areas");
   }
 
-  console.log(`  Powerhouse ID: ${powerhouse.id}, Personal ID: ${personal.id}`);
+  console.log(`  Kingdom Building ID: ${powerhouse.id}, Personal ID: ${personal.id}`);
 
   // ── Powerhouse Tasks ─────────────────────────────
   sqlite
@@ -92,7 +92,7 @@ function seed() {
   sqlite.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run("created_at", now);
 
   console.log("✅ Seeded successfully!");
-  console.log("  • 2 focus areas (Powerhouse + Personal)");
+  console.log("  • 2 focus areas (Kingdom Building + Personal)");
   console.log("  • 5 tasks (a, b, c, d, e)");
   console.log("  • Settings configured");
 

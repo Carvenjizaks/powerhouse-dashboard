@@ -14,13 +14,13 @@ async function sendMorningEmail() {
     year: "numeric",
   });
 
-  const body = `⚡ POWERHOUSE — Daily Focus • ${today}
+  const body = `👑 KINGDOM BUILDING — Daily Focus • ${today}
 
 Good morning, Carven.
 
 Here are your 5 priorities today:
 
-━━━ ⚡ POWERHOUSE ━━━
+━━━ 👑 KINGDOM BUILDING ━━━
 ☐ a) LeadersLAB — Invest in a future leader
 ☐ b) Powerhouse Academy — Move the plan forward (1 step)
 ☐ c) Discipleship + Demonstration — Pour into someone today
@@ -45,7 +45,7 @@ Track your progress: https://carvenjizaks-dashboard.vercel.app/dashboard
     body: JSON.stringify({
       from: "carvenjiz@agentmail.to",
       to: "carvenjizaks@gmail.com",
-      subject: `⚡ Carvenjizaks — Today's Focus (${today})`,
+      subject: `👑 Carvenjizaks — Today's Focus (${today})`,
       text: body,
     }),
   });

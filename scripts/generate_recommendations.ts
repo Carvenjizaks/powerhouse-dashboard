@@ -51,8 +51,8 @@ async function generate() {
     .where(eq(tasks.isActive, 1))
     .all();
 
-  // Powerhouse check
-  const phTasks = allTasks.filter((t) => t.focusAreaSlug === "powerhouse");
+  // Kingdom Building check
+  const phTasks = allTasks.filter((t) => t.focusAreaSlug === "kingdom-building");
   const phDone = weekLogs.filter(
     (l) => phTasks.some((t) => t.id === l.taskId) && l.completed === 1
   ).length;
@@ -62,17 +62,17 @@ async function generate() {
   if (phRatio < 0.3) {
     newRecs.push({
       date: today,
-      text: "Powerhouse tasks are low this week. Block 2 hours tomorrow for Kingdom work.",
+      text: "Kingdom Building tasks are low this week. Block 2 hours tomorrow for Kingdom work.",
       type: "warning",
-      category: "powerhouse",
+      category: "kingdom-building",
       priority: 3,
     });
   } else if (phRatio > 0.7) {
     newRecs.push({
       date: today,
-      text: "🔥 Strong Powerhouse week! You're building momentum in the Kingdom.",
+      text: "🔥 Strong Kingdom Building week! You're building momentum in the Kingdom.",
       type: "encouragement",
-      category: "powerhouse",
+      category: "kingdom-building",
       priority: 2,
     });
   }

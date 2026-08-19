@@ -24,16 +24,16 @@ export async function GET() {
     const newRecs: Array<any> = [];
 
     // Powerhouse check
-    const ph = allTasks.filter((t: any) => t.focus_area_slug === "powerhouse");
+    const ph = allTasks.filter((t: any) => t.focus_area_slug === "kingdom-building");
     const phDone = weekLogs.filter(
       (l: any) => ph.some((t: any) => t.id === l.task_id) && l.completed === 1
     ).length;
     const phRatio = ph.length * 7 > 0 ? phDone / (ph.length * 7) : 0;
 
     if (phRatio < 0.3) {
-      newRecs.push({ date: today, text: "Your Powerhouse tasks are lagging this week. Block 2 hours today for Kingdom work.", type: "warning", category: "powerhouse", priority: 3 });
+      newRecs.push({ date: today, text: "Your Kingdom Building tasks are lagging this week. Block 2 hours today for Kingdom work.", type: "warning", category: "kingdom-building", priority: 3 });
     } else if (phRatio > 0.7) {
-      newRecs.push({ date: today, text: "🔥 Strong Powerhouse engagement! Keep building Kingdom momentum.", type: "encouragement", category: "powerhouse", priority: 2 });
+      newRecs.push({ date: today, text: "🔥 Strong Kingdom Building engagement! Keep building Kingdom momentum.", type: "encouragement", category: "kingdom-building", priority: 2 });
     }
 
     // Reading check

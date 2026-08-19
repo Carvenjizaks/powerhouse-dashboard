@@ -151,10 +151,10 @@ export default function DashboardPage() {
   };
 
   // Group tasks by focus area
-  const powerhouseTasks = tasks.filter((t) => t.focusAreaSlug === "powerhouse");
+  const kingdomTasks = tasks.filter((t) => t.focusAreaSlug === "kingdom-building");
   const personalTasks = tasks.filter((t) => t.focusAreaSlug === "personal");
 
-  const powerhouseDone = powerhouseTasks.filter((t) => t.completed).length;
+  const kingdomDone = kingdomTasks.filter((t) => t.completed).length;
   const personalDone = personalTasks.filter((t) => t.completed).length;
 
   const today = new Date().toLocaleDateString("en-US", {
@@ -295,20 +295,20 @@ export default function DashboardPage() {
 
         {/* ── Task Cards ──────────────────────���──────── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Powerhouse Card */}
+          {/* Kingdom Building Card */}
           <DashboardCard
-            title="POWERHOUSE"
-            emoji="⚡"
+            title="KINGDOM BUILDING"
+            emoji="👑"
             color="#F59E0B"
-            glow={powerhouseDone === powerhouseTasks.length && powerhouseTasks.length > 0}
-            stats={{ done: powerhouseDone, total: powerhouseTasks.length }}
+            glow={kingdomDone === kingdomTasks.length && kingdomTasks.length > 0}
+            stats={{ done: kingdomDone, total: kingdomTasks.length }}
           >
-            {powerhouseTasks.map((task) => (
+            {kingdomTasks.map((task) => (
               <TaskItem
                 key={task.id}
                 {...task}
                 color="#F59E0B"
-                emoji="⚡"
+                emoji="👑"
                 onToggle={handleToggle}
                 disabled={toggling === task.id}
               />
@@ -345,7 +345,7 @@ export default function DashboardPage() {
         {/* ── Footer ──────────────────────────────────── */}
         <footer className="text-center pb-8">
           <p className="text-[10px] text-dark-600 font-mono">
-            CARVENJIZAKS'S PERSONAL DASHBOARD v1.0 •{" "}
+            CARVENJIZAKS'S PERSONAL DASHBOARD v1.0 | KINGDOM BUILDING •{" "}
             {new Date().toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",

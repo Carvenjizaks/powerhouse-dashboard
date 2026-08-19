@@ -14,11 +14,11 @@ async function sendEveningEmail() {
     year: "numeric",
   });
 
-  const body = `⚡ POWERHOUSE — Evening Review • ${today}
+  const body = `👑 KINGDOM BUILDING — Evening Review • ${today}
 
 Time to review your day. Be honest.
 
-━━━ ⚡ POWERHOUSE ━━━
+━━━ 👑 KINGDOM BUILDING ━━━
 [ ] a) LeadersLAB — Did you invest in a leader?
 [ ] b) Powerhouse Academy — Did you move it forward?
 [ ] c) Discipleship — Did you pour into someone?
@@ -46,7 +46,7 @@ Log your answers: https://carvenjizaks-dashboard.vercel.app/dashboard
     body: JSON.stringify({
       from: "carvenjiz@agentmail.to",
       to: "carvenjizaks@gmail.com",
-      subject: `⚡ Carvenjizaks — Evening Review (${today})`,
+      subject: `👑 Carvenjizaks — Evening Review (${today})`,
       text: body,
     }),
   });

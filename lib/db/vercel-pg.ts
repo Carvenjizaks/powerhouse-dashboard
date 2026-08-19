@@ -88,11 +88,11 @@ export async function ensureSeeded() {
     await db.query("CREATE TABLE IF NOT EXISTS recommendations (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, text TEXT NOT NULL, type TEXT NOT NULL DEFAULT 'tip', category TEXT, priority INTEGER NOT NULL DEFAULT 0, is_read INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT (datetime('now')))");
     await db.query("CREATE TABLE IF NOT EXISTS settings (id INTEGER PRIMARY KEY AUTOINCREMENT, key TEXT NOT NULL UNIQUE, value TEXT NOT NULL, updated_at TEXT NOT NULL DEFAULT (datetime('now')))");
 
-    await db.query("INSERT INTO focus_areas (slug, name, color, emoji, sort_order) VALUES ('powerhouse', 'POWERHOUSE', '#F59E0B', '⚡', 0)");
+    await db.query("INSERT INTO focus_areas (slug, name, color, emoji, sort_order) VALUES ('kingdom-building', 'KINGDOM BUILDING', '#F59E0B', '👑', 0)");
     await db.query("INSERT INTO focus_areas (slug, name, color, emoji, sort_order) VALUES ('personal', 'PERSONAL', '#10B981', '🧑', 1)");
     
     const rows2: any = Array.from(await db.query("SELECT id, slug FROM focus_areas ORDER BY sort_order") || []);
-    const ph = rows2.find((r: any) => r.slug === "powerhouse");
+    const ph = rows2.find((r: any) => r.slug === "kingdom-building");
     const pe = rows2.find((r: any) => r.slug === "personal");
 
     if (ph && pe) {

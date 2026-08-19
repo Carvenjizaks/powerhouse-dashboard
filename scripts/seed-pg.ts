@@ -25,15 +25,15 @@ async function seed() {
   await client.query("DELETE FROM settings");
 
   // Focus areas
-  await client.query("INSERT INTO focus_areas (slug, name, color, emoji, sort_order) VALUES ('powerhouse', 'POWERHOUSE', '#F59E0B', '⚡', 0)");
+  await client.query("INSERT INTO focus_areas (slug, name, color, emoji, sort_order) VALUES ('kingdom-building', 'KINGDOM BUILDING', '#F59E0B', '👑', 0)");
   await client.query("INSERT INTO focus_areas (slug, name, color, emoji, sort_order) VALUES ('personal', 'PERSONAL', '#10B981', '🧑', 1)");
 
   const res = await client.query("SELECT id, slug FROM focus_areas ORDER BY sort_order");
-  const ph = res.rows.find((r) => r.slug === "powerhouse");
+  const ph = res.rows.find((r) => r.slug === "kingdom-building");
   const pe = res.rows.find((r) => r.slug === "personal");
 
   if (!ph || !pe) throw new Error("Failed to create focus areas");
-  console.log(`  Powerhouse ID: ${ph.id}, Personal ID: ${pe.id}`);
+  console.log(`  Kingdom Building ID: ${ph.id}, Personal ID: ${pe.id}`);
 
   // Powerhouse tasks
   await client.query("INSERT INTO tasks (focus_area_id, code, title, description, sort_order) VALUES ($1, 'a', 'LeadersLAB', 'Select and train new leaders — invest in a future leader today', 0)", [ph.id]);
@@ -52,7 +52,7 @@ async function seed() {
   await client.query("INSERT INTO settings (key, value) VALUES ('reading_daily_min', '60')");
 
   console.log("✅ Seeded successfully!");
-  console.log("  • 2 focus areas (Powerhouse + Personal)");
+  console.log("  • 2 focus areas (Kingdom Building + Personal)");
   console.log("  • 5 tasks (a, b, c, d, e)");
   console.log("  • Settings configured");
 
