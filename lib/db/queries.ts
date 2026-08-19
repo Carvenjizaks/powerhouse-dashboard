@@ -51,13 +51,13 @@ export async function getTasksWithStatus(date: string) {
 export async function toggleDailyLog(taskId: number, completed: boolean, date: string) {
   const existing = await query("SELECT * FROM daily_logs WHERE task_id = $1 AND date = $2", [taskId, date]);
   if ((existing as any[]).length > 0) {
-    await execute("UPDATE daily_logs SET completed = $1, updated_at = NOW() WHERE task_id = $2 AND date = $3", [
+    await execute("UPDATE daily_logs SET completed = ?1, updated_at = datetime('now') WHERE task_id = ?2 AND date = ?3", [
       completed ? 1 : 0,
       taskId,
       date,
     ]);
   } else {
-    await execute("INSERT INTO daily_logs (task_id, date, completed) VALUES ($1, $2, $3)", [
+    await execute("INSERT INTO daily_logs (task_id, date, completed) VALUES (?1, ?2, ?3)", [
       taskId,
       date,
       completed ? 1 : 0,
