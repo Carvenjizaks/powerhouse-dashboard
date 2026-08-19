@@ -64,7 +64,7 @@ export default function WeekChart({
                 <div
                   className={cn(
                     "w-full rounded-lg transition-all duration-500 relative overflow-hidden",
-                    isToday && "ring-2 ring-offset-2 ring-offset-white/50"
+                    isToday && "shadow-md"
                   )}
                   style={{
                     height: `${height}%`,
@@ -79,7 +79,6 @@ export default function WeekChart({
                         : day.percentage > 0
                         ? `0 2px 8px ${color}20`
                         : "none",
-                    ringColor: isToday ? color : undefined,
                   }}
                 >
                   {/* Glow on full */}
