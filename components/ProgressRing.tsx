@@ -15,7 +15,7 @@ export default function ProgressRing({
   size = 100,
   strokeWidth = 8,
   color = "#F59E0B",
-  bgColor = "#1E293B",
+  bgColor = "#F5F5F4",
   label,
   sublabel,
 }: ProgressRingProps) {
@@ -24,8 +24,8 @@ export default function ProgressRing({
   const offset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <svg width={size} height={size} className="transform -rotate-90">
+    <div className="flex flex-col items-center gap-1 relative">
+      <svg width={size} height={size} className="transform -rotate-90 drop-shadow-sm">
         {/* Background circle */}
         <circle
           cx={size / 2}
@@ -47,6 +47,9 @@ export default function ProgressRing({
           strokeDashoffset={offset}
           strokeLinecap="round"
           className="transition-all duration-700 ease-out"
+          style={{
+            filter: `drop-shadow(0 0 4px ${color}40)`,
+          }}
         />
       </svg>
       <div
@@ -54,17 +57,19 @@ export default function ProgressRing({
         style={{ width: size, height: size }}
       >
         <span
-          className="text-2xl font-bold"
+          className="text-lg font-bold tabular-nums"
           style={{ color }}
         >
           {percentage}%
         </span>
       </div>
       {label && (
-        <span className="text-xs text-dark-400 font-medium mt-1">{label}</span>
+        <span className="text-[10px] text-surface-400 font-medium uppercase tracking-wider mt-1">
+          {label}
+        </span>
       )}
       {sublabel && (
-        <span className="text-[10px] text-dark-500">{sublabel}</span>
+        <span className="text-[9px] text-surface-300 font-mono">{sublabel}</span>
       )}
     </div>
   );

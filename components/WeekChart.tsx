@@ -19,54 +19,75 @@ export default function WeekChart({
   data,
   color = "#F59E0B",
 }: WeekChartProps) {
-  const maxPercentage = Math.max(...data.map((d) => d.percentage), 1);
-
   return (
     <div className="glass-card p-5 animate-slide-up">
-      <h2 className="text-sm font-bold uppercase tracking-widest text-dark-300 mb-4">
-        📊 This Week
-      </h2>
+      <div className="flex items-center gap-2 mb-5">
+        <div
+          className="w-2 h-2 rounded-full"
+          style={{ background: color }}
+        />
+        <h2 className="text-xs font-bold uppercase tracking-[0.15em] text-surface-500">
+          This Week
+        </h2>
+      </div>
 
-      <div className="flex items-end justify-between gap-2 h-32">
-        {data.map((day) => {
+      <div className="flex items-end justify-between gap-2 h-28 px-1">
+        {data.map((day, i) => {
           const height = Math.max(
             (day.percentage / 100) * 100,
             day.percentage > 0 ? 4 : 0
           );
+          const isToday =
+            day.date === new Date().toISOString().split("T")[0];
+          const isFull = day.percentage === 100;
+
           return (
             <div
               key={day.date}
-              className="flex flex-col items-center gap-1 flex-1"
+              className="flex flex-col items-center gap-1.5 flex-1"
             >
-              {/* Bar */}
-              <div className="relative w-full h-full flex items-end justify-center">
-                {/* Tooltip */}
-                <div className="absolute -top-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-[10px] font-bold" style={{ color }}>
+              {/* Bar container */}
+              <div className="relative w-full h-full flex items-end justify-center group">
+                {/* Percentage label on hover */}
+                <div
+                  className="absolute -top-5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  <span
+                    className="text-[10px] font-bold tabular-nums"
+                    style={{ color }}
+                  >
                     {day.percentage}%
                   </span>
                 </div>
 
+                {/* Bar */}
                 <div
-                  className="w-full rounded-t-md transition-all duration-500 group cursor-pointer relative"
+                  className={cn(
+                    "w-full rounded-lg transition-all duration-500 relative overflow-hidden",
+                    isToday && "ring-2 ring-offset-2 ring-offset-white/50"
+                  )}
                   style={{
                     height: `${height}%`,
-                    backgroundColor:
-                      day.percentage === 100
-                        ? color
-                        : day.percentage > 0
-                        ? `${color}60`
-                        : "#1E293B",
                     minHeight: day.percentage > 0 ? "4px" : "2px",
+                    background:
+                      day.percentage === 0
+                        ? "#F5F5F4"
+                        : `linear-gradient(to top, ${color}, ${color}88)`,
+                    boxShadow:
+                      isFull
+                        ? `0 0 12px ${color}40`
+                        : day.percentage > 0
+                        ? `0 2px 8px ${color}20`
+                        : "none",
+                    ringColor: isToday ? color : undefined,
                   }}
                 >
-                  {/* Glow on full completion */}
-                  {day.percentage === 100 && (
+                  {/* Glow on full */}
+                  {isFull && (
                     <div
-                      className="absolute inset-0 rounded-t-md animate-pulse-glow"
+                      className="absolute inset-0 rounded-lg animate-pulse-glow"
                       style={{
-                        background: `linear-gradient(to top, ${color}, transparent)`,
-                        opacity: 0.3,
+                        background: `linear-gradient(to top, ${color}30, transparent)`,
                       }}
                     />
                   )}
@@ -74,7 +95,12 @@ export default function WeekChart({
               </div>
 
               {/* Day label */}
-              <span className="text-[10px] text-dark-500 font-medium">
+              <span
+                className={cn(
+                  "text-[10px] font-medium tracking-wider",
+                  isToday ? "text-surface-600 font-bold" : "text-surface-400"
+                )}
+              >
                 {day.dayName}
               </span>
             </div>

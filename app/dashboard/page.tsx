@@ -2,11 +2,12 @@
 
 import { useEffect, useState, useCallback } from "react";
 import {
-  Zap,
+  Crown,
   Flame,
   BookOpen,
   Calendar,
   RefreshCw,
+  Target,
 } from "lucide-react";
 import DashboardCard from "@/components/DashboardCard";
 import TaskItem from "@/components/TaskItem";
@@ -113,7 +114,6 @@ export default function DashboardPage() {
     fetchAll();
   }, [fetchAll]);
 
-  // Auto-refresh every 60 seconds
   useEffect(() => {
     const interval = setInterval(fetchAll, 60000);
     return () => clearInterval(interval);
@@ -121,7 +121,6 @@ export default function DashboardPage() {
 
   const handleToggle = async (taskId: number, completed: boolean) => {
     setToggling(taskId);
-    // Optimistic update
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, completed } : t))
     );
@@ -132,11 +131,8 @@ export default function DashboardPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ taskId, completed }),
       });
-      // Refresh everything to get updated stats
       await fetchAll();
     } catch (error) {
-      console.error("Failed to toggle task:", error);
-      // Revert on error
       setTasks((prev) =>
         prev.map((t) => (t.id === taskId ? { ...t, completed: !completed } : t))
       );
@@ -150,7 +146,6 @@ export default function DashboardPage() {
     fetchAll();
   };
 
-  // Group tasks by focus area
   const kingdomTasks = tasks.filter((t) => t.focusAreaSlug === "kingdom-building");
   const personalTasks = tasks.filter((t) => t.focusAreaSlug === "personal");
 
@@ -167,10 +162,13 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Zap className="w-10 h-10 text-powerhouse-500 animate-pulse" />
-          <span className="text-sm text-dark-400 font-mono">
-            Loading Powerhouse...
+        <div
+          className="flex flex-col items-center gap-4 p-10 rounded-3xl"
+          style={{ background: "rgba(255,255,255,0.7)", backdropFilter: "blur(20px)" }}
+        >
+          <Crown className="w-10 h-10 text-kingdom-400 animate-breathe" />
+          <span className="text-sm text-surface-400 font-mono tracking-wider">
+            Loading Dashboard...
           </span>
         </div>
       </div>
@@ -178,37 +176,59 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950">
+    <div className="min-h-screen relative pb-12">
+      {/* ── Floating background blobs ─────────────────── */}
+      <div className="blob-1" />
+      <div className="blob-2" />
+      <div className="blob-3" />
+
       {/* ── Top Bar ──────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b border-dark-800 bg-dark-950/90 backdrop-blur-md">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="sticky top-3 z-50 max-w-5xl mx-auto px-4">
+        <div
+          className="rounded-2xl px-5 py-3 flex items-center justify-between"
+          style={{
+            background: "rgba(255, 255, 255, 0.72)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid rgba(255, 255, 255, 0.8)",
+            boxShadow: "0 4px 24px rgba(149, 157, 165, 0.1)",
+          }}
+        >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-powerhouse-500/10 border border-powerhouse-500/20 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-powerhouse-500" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-kingdom flex items-center justify-center shadow-sm">
+              <Crown className="w-5 h-5 text-kingdom-600" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-dark-100 uppercase tracking-wider">
+              <h1 className="text-sm font-bold text-surface-800 uppercase tracking-wider">
                 Carvenjizaks
               </h1>
-              <p className="text-[10px] text-dark-500 font-mono">
+              <p className="text-[10px] text-surface-400 font-mono">
                 {today}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Streak */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-dark-800 border border-dark-700/50">
+            <div
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl"
+              style={{
+                background: streak >= 3
+                  ? "linear-gradient(135deg, #FEF3C7, #FDE68A)"
+                  : "rgba(255,255,255,0.6)",
+                border: "1px solid",
+                borderColor: streak >= 3 ? "#FCD34D" : "rgba(255,255,255,0.8)",
+              }}
+            >
               <Flame
                 className={cn(
                   "w-4 h-4",
-                  streak >= 3 ? "text-orange-400" : "text-dark-500"
+                  streak >= 3 ? "text-amber-500" : "text-surface-300"
                 )}
               />
               <span
                 className={cn(
                   "text-xs font-bold",
-                  streak >= 3 ? "text-orange-400" : "text-dark-400"
+                  streak >= 3 ? "text-amber-700" : "text-surface-400"
                 )}
               >
                 {streak} day{streak !== 1 ? "s" : ""}
@@ -219,7 +239,8 @@ export default function DashboardPage() {
             <button
               onClick={handleRefresh}
               disabled={refreshing}
-              className="p-2 rounded-lg hover:bg-dark-800 transition-colors text-dark-400 hover:text-dark-200"
+              className="p-2 rounded-xl transition-all duration-200 hover:bg-white/60 text-surface-400 hover:text-surface-600"
+              style={{ border: "1px solid rgba(255,255,255,0.8)" }}
             >
               <RefreshCw
                 className={cn("w-4 h-4", refreshing && "animate-spin")}
@@ -230,11 +251,10 @@ export default function DashboardPage() {
       </header>
 
       {/* ── Main Content ─────────────────────────────── */}
-      <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-5xl mx-auto px-4 py-6 space-y-5">
         {/* ── Overview Row ──────────────────────────── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {/* Today's Progress */}
-          <div className="glass-card p-4 flex flex-col items-center">
+          <div className="glass-card p-4 flex flex-col items-center animate-scale-in">
             <ProgressRing
               percentage={stats.percentage}
               size={80}
@@ -245,57 +265,57 @@ export default function DashboardPage() {
             />
           </div>
 
-          {/* Book Deadline */}
-          <div className="glass-card p-4 flex flex-col items-center justify-center">
-            <BookOpen className="w-5 h-5 text-purple-400 mb-1" />
-            <span className="text-2xl font-bold text-purple-400">
+          <div className="glass-card p-4 flex flex-col items-center justify-center animate-scale-in" style={{ animationDelay: "0.1s" }}>
+            <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center mb-1.5">
+              <BookOpen className="w-4.5 h-4.5 text-purple-500" />
+            </div>
+            <span className="text-2xl font-bold text-purple-500">
               {bookDeadline.daysLeft}
             </span>
-            <span className="text-[10px] text-dark-500 font-medium uppercase tracking-wider">
+            <span className="text-[10px] text-surface-400 font-medium uppercase tracking-wider">
               Days Left
             </span>
-            <span className="text-[9px] text-dark-600 mt-0.5">2 Books</span>
+            <span className="text-[9px] text-surface-300 mt-0.5">2 Books</span>
           </div>
 
-          {/* Monthly */}
-          <div className="glass-card p-4 flex flex-col items-center justify-center">
-            <Calendar className="w-5 h-5 text-blue-400 mb-1" />
-            <span className="text-2xl font-bold text-blue-400">
+          <div className="glass-card p-4 flex flex-col items-center justify-center animate-scale-in" style={{ animationDelay: "0.2s" }}>
+            <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center mb-1.5">
+              <Calendar className="w-4.5 h-4.5 text-blue-500" />
+            </div>
+            <span className="text-2xl font-bold text-blue-500">
               {monthStats.percentage}%
             </span>
-            <span className="text-[10px] text-dark-500 font-medium uppercase tracking-wider">
+            <span className="text-[10px] text-surface-400 font-medium uppercase tracking-wider">
               Monthly
             </span>
-            <span className="text-[9px] text-dark-600 mt-0.5">
+            <span className="text-[9px] text-surface-300 mt-0.5">
               {monthStats.completed}/{monthStats.total} checks
             </span>
           </div>
 
-          {/* Streak */}
-          <div className="glass-card p-4 flex flex-col items-center justify-center">
+          <div className="glass-card p-4 flex flex-col items-center justify-center animate-scale-in" style={{ animationDelay: "0.3s" }}>
             <Flame
               className={cn(
-                "w-5 h-5 mb-1",
-                streak >= 3 ? "text-orange-400" : "text-dark-500"
+                "w-5 h-5 mb-1.5",
+                streak >= 3 ? "text-amber-500" : "text-surface-300"
               )}
             />
             <span
               className={cn(
                 "text-2xl font-bold",
-                streak >= 3 ? "text-orange-400" : "text-dark-400"
+                streak >= 3 ? "text-amber-500" : "text-surface-400"
               )}
             >
               {streak}
             </span>
-            <span className="text-[10px] text-dark-500 font-medium uppercase tracking-wider">
+            <span className="text-[10px] text-surface-400 font-medium uppercase tracking-wider">
               Day Streak
             </span>
           </div>
         </div>
 
-        {/* ── Task Cards ──────────────────────���──────── */}
+        {/* ── Task Cards ──────────────────────────────── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Kingdom Building Card */}
           <DashboardCard
             title="KINGDOM BUILDING"
             emoji="👑"
@@ -303,7 +323,7 @@ export default function DashboardPage() {
             glow={kingdomDone === kingdomTasks.length && kingdomTasks.length > 0}
             stats={{ done: kingdomDone, total: kingdomTasks.length }}
           >
-            {kingdomTasks.map((task) => (
+            {kingdomTasks.map((task, i) => (
               <TaskItem
                 key={task.id}
                 {...task}
@@ -315,7 +335,6 @@ export default function DashboardPage() {
             ))}
           </DashboardCard>
 
-          {/* Personal Card */}
           <DashboardCard
             title="PERSONAL"
             emoji="🧑"
@@ -336,22 +355,22 @@ export default function DashboardPage() {
           </DashboardCard>
         </div>
 
-        {/* ── Week Chart ──────────────────────────────── */}
+        {/* ── Week Chart ─────��────────────────────────── */}
         <WeekChart data={weekData} />
 
         {/* ── Smart Recommendations ───────────────────── */}
         <RecommendationCard recommendations={recommendations} />
 
         {/* ── Footer ──────────────────────────────────── */}
-        <footer className="text-center pb-8">
-          <p className="text-[10px] text-dark-600 font-mono">
-            CARVENJIZAKS'S PERSONAL DASHBOARD v1.0 | KINGDOM BUILDING •{" "}
-            {new Date().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
+        <footer className="text-center pt-2">
+          <div
+            className="inline-block px-5 py-2 rounded-full"
+            style={{ background: "rgba(255,255,255,0.5)", backdropFilter: "blur(8px)" }}
+          >
+            <p className="text-[10px] text-surface-400 font-mono tracking-wider">
+              CARVENJIZAKS'S PERSONAL DASHBOARD v1.0
+            </p>
+          </div>
         </footer>
       </main>
     </div>

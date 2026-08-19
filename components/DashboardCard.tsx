@@ -31,36 +31,46 @@ export default function DashboardCard({
     <div
       className={cn(
         "glass-card p-5 animate-slide-up",
-        glow && (color === "#F59E0B" ? "glow-amber" : "glow-emerald"),
+        glow && (color === "#F59E0B" ? "glow-kingdom" : "glow-personal"),
         className
       )}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-lg">{emoji}</span>
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+            style={{
+              background: `linear-gradient(135deg, ${color}15, ${color}08)`,
+              border: `1px solid ${color}20`,
+            }}
+          >
+            {emoji}
+          </div>
           <h2
-            className="text-sm font-bold uppercase tracking-widest"
+            className="text-xs font-bold uppercase tracking-[0.15em]"
             style={{ color }}
           >
             {title}
           </h2>
         </div>
         {stats && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            {/* Mini progress bar */}
             <div
-              className="h-1.5 w-20 rounded-full overflow-hidden bg-dark-700"
+              className="h-2 w-16 rounded-full overflow-hidden"
+              style={{ background: `${color}15` }}
             >
               <div
-                className="h-full rounded-full transition-all duration-500"
+                className="h-full rounded-full transition-all duration-500 ease-out"
                 style={{
                   width: `${percentage}%`,
-                  backgroundColor: color,
+                  background: `linear-gradient(90deg, ${color}, ${color}88)`,
                 }}
               />
             </div>
             <span
-              className="text-xs font-bold"
+              className="text-xs font-bold tabular-nums"
               style={{ color }}
             >
               {stats.done}/{stats.total}
