@@ -14,6 +14,8 @@ import TaskItem from "@/components/TaskItem";
 import ProgressRing from "@/components/ProgressRing";
 import WeekChart from "@/components/WeekChart";
 import RecommendationCard from "@/components/RecommendationCard";
+import WisdomCard from "@/components/WisdomCard";
+import LifeBalance from "@/components/LifeBalance";
 import { cn } from "@/lib/utils";
 
 interface Task {
@@ -80,20 +82,23 @@ export default function DashboardPage() {
     daysLeft: 103,
   });
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [wisdom, setWisdom] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchAll = useCallback(async () => {
     try {
-      const [tasksRes, progressRes, recsRes] = await Promise.all([
+      const [tasksRes, progressRes, recsRes, wisdomRes] = await Promise.all([
         fetch("/api/tasks"),
         fetch("/api/progress"),
         fetch("/api/recommendations"),
+        fetch("/api/wisdom"),
       ]);
       const tasksData = await tasksRes.json();
       const progressData = await progressRes.json();
       const recsData = await recsRes.json();
+      const wisdomData = await wisdomRes.json();
 
       setTasks(tasksData.tasks);
       setStats(tasksData.stats);
@@ -102,6 +107,7 @@ export default function DashboardPage() {
       setStreak(progressData.streak);
       setBookDeadline(progressData.bookDeadline);
       setRecommendations(recsData.recommendations);
+      setWisdom(wisdomData.wisdom);
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
     } finally {
@@ -174,6 +180,8 @@ export default function DashboardPage() {
       </div>
     );
   }
+
+  const hasWisdom = wisdom && wisdom.quote;
 
   return (
     <div className="min-h-screen relative pb-12">
@@ -357,6 +365,12 @@ export default function DashboardPage() {
 
         {/* ── Week Chart ─────��────────────────────────── */}
         <WeekChart data={weekData} />
+
+        {/* ── Daily Wisdom ────────────────────────────── */}
+        {hasWisdom && <WisdomCard wisdom={wisdom} />}
+
+        {/* ── Life Balance ─────────────────────────────── */}
+        <LifeBalance />
 
         {/* ── Smart Recommendations ───────────────────── */}
         <RecommendationCard recommendations={recommendations} />
