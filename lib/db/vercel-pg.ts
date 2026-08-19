@@ -79,7 +79,15 @@ export async function ensureSeeded() {
   try {
     // @ts-ignore
     const tables = Array.from(await db.query("SELECT name FROM sqlite_master WHERE type='table' AND name='focus_areas'") || []);
-    if (tables.length > 0) return;
+    if (tables.length > 0) {
+      // Check if old slug exists and migrate
+      const oldPH = Array.from(await db.query("SELECT id FROM focus_areas WHERE slug = 'powerhouse'") || []);
+      if (oldPH.length > 0) {
+        await db.query("UPDATE focus_areas SET slug = 'kingdom-building', name = 'KINGDOM BUILDING', emoji = '👑' WHERE slug = 'powerhouse'");
+      }
+      const newPH = Array.from(await db.query("SELECT id, slug FROM focus_areas WHERE slug = 'kingdom-building'") || []);
+      if (newPH.length > 0) return; // Already migrated
+    }
 
     await db.query("CREATE TABLE IF NOT EXISTS focus_areas (id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT NOT NULL UNIQUE, name TEXT NOT NULL, color TEXT NOT NULL, emoji TEXT NOT NULL, sort_order INTEGER NOT NULL DEFAULT 0)");
     await db.query("CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, focus_area_id INTEGER NOT NULL, code TEXT NOT NULL, title TEXT NOT NULL, description TEXT, target TEXT, target_date TEXT, sort_order INTEGER NOT NULL DEFAULT 0, is_active INTEGER NOT NULL DEFAULT 1)");
