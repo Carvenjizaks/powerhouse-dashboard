@@ -3,7 +3,10 @@
  * These queries are database-agnostic (work with Postgres and SQLite)
  */
 
-import { query, queryOne, execute } from "./vercel-pg";
+import { query, queryOne, execute, ensureSeeded } from "./vercel-pg";
+
+// Auto-seed on first load (for Vercel serverless with libSQL)
+ensureSeeded();
 
 // ── Focus Areas ────────────────────────────────────────
 export async function getFocusAreas() {
