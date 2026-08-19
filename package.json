@@ -1,0 +1,49 @@
+{
+  "name": "powerhouse-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "seed": "tsx scripts/seed.ts",
+    "seed:pg": "DATABASE_URL=$DATABASE_URL tsx scripts/seed-pg.ts",
+    "migrate:pg": "DATABASE_URL=$DATABASE_URL tsx scripts/migrate-pg.ts",
+    "setup:pg": "DATABASE_URL=$DATABASE_URL tsx scripts/migrate-pg.ts && DATABASE_URL=$DATABASE_URL tsx scripts/seed-pg.ts",
+    "remind:morning": "tsx scripts/remind_morning.ts",
+    "remind:evening": "tsx scripts/remind_evening.ts",
+    "recommend": "tsx scripts/generate_recommendations.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.6.0",
+    "@neondatabase/serverless": "^1.1.0",
+    "better-sqlite3": "^11.0.0",
+    "clsx": "^2.1.0",
+    "date-fns": "^3.6.0",
+    "drizzle-orm": "^0.30.10",
+    "lucide-react": "^0.370.0",
+    "next": "^14.2.0",
+    "pg": "^8.23.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "recharts": "^2.12.0",
+    "tailwind-merge": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/node": "^20.12.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.0",
+    "drizzle-kit": "^0.22.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  }
+}

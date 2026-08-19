@@ -1,0 +1,9 @@
+node_modules/
+.next/
+data/
+drizzle/
+*.db
+*.db-wal
+*.db-shm
+.env.local
+.env.production
